@@ -61,28 +61,28 @@ const MovieCarousel: React.FC = () => {
 
   const fetchMovies = async () => {
     try {
-      const data = await searchMarvelMovies(page);
-      if (data.Search) {
-        setMovies((prev) => [...prev, ...data.Search]);
-        setHasMore(data.Search.length > 0);
-
-        const newDetails = await Promise.all(
-          data.Search.map((movie) =>
-            details[movie.imdbID]
-              ? Promise.resolve(details[movie.imdbID])
-              : getMovieDetails(movie.imdbID)
-          )
-        );
-
-        const detailsMap = newDetails.reduce((acc, detail) => {
-          acc[detail.imdbID] = detail;
-          return acc;
-        }, {} as Record<string, OMDbMovieDetails>);
-
-        setDetails((prev) => ({ ...prev, ...detailsMap }));
-      } else {
-        setHasMore(false);
-      }
+        const data = await searchMarvelMovies(page);
+        if (data.Search && Array.isArray(data.Search)) {
+          setMovies((prev) => [...prev, ...data.Search]);
+          setHasMore(data.Search.length > 0);
+        
+          const newDetails = await Promise.all(
+            data.Search.map((movie) =>
+              details[movie.imdbID]
+                ? Promise.resolve(details[movie.imdbID])
+                : getMovieDetails(movie.imdbID)
+            )
+          );
+        
+          const detailsMap = newDetails.reduce((acc, detail) => {
+            acc[detail.imdbID] = detail;
+            return acc;
+          }, {} as Record<string, OMDbMovieDetails>);
+        
+          setDetails((prev) => ({ ...prev, ...detailsMap }));
+        } else {
+          setHasMore(false);
+        }        
     } catch (error) {
       console.error("Failed to fetch movies:", error);
     }
