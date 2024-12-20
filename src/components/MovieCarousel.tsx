@@ -57,32 +57,30 @@ const MovieCarousel: React.FC = () => {
   const [details, setDetails] = useState<Record<string, OMDbMovieDetails>>({});
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
-  const [initialized, setInitialized] = useState(false); // Controla se já inicializou
+  const [initialized, setInitialized] = useState(false);
 
   const fetchMovies = async () => {
     try {
-        const data = await searchMarvelMovies(page);
-        if (data.Search && Array.isArray(data.Search)) {
-          setMovies((prev) => [...prev, ...data.Search]);
-          setHasMore(data.Search.length > 0);
-        
-          const newDetails = await Promise.all(
-            data.Search.map((movie) =>
-              details[movie.imdbID]
-                ? Promise.resolve(details[movie.imdbID])
-                : getMovieDetails(movie.imdbID)
-            )
-          );
-        
-          const detailsMap = newDetails.reduce((acc, detail) => {
-            acc[detail.imdbID] = detail;
-            return acc;
-          }, {} as Record<string, OMDbMovieDetails>);
-        
-          setDetails((prev) => ({ ...prev, ...detailsMap }));
-        } else {
-          setHasMore(false);
-        }        
+      const data = await searchMarvelMovies(page);
+      const searchResults = data.Search ?? [];
+
+      setMovies((prev) => [...prev, ...searchResults]);
+      setHasMore(searchResults.length > 0);
+
+      const newDetails = await Promise.all(
+        searchResults.map((movie) =>
+          details[movie.imdbID]
+            ? Promise.resolve(details[movie.imdbID])
+            : getMovieDetails(movie.imdbID)
+        )
+      );
+
+      const detailsMap = newDetails.reduce((acc, detail) => {
+        acc[detail.imdbID] = detail;
+        return acc;
+      }, {} as Record<string, OMDbMovieDetails>);
+
+      setDetails((prev) => ({ ...prev, ...detailsMap }));
     } catch (error) {
       console.error("Failed to fetch movies:", error);
     }
@@ -93,7 +91,6 @@ const MovieCarousel: React.FC = () => {
   }, [page]);
 
   useEffect(() => {
-    // Forçar atualização apenas na inicialização
     if (!initialized && sliderRef.current) {
       sliderRef.current.slickGoTo(0);
       setInitialized(true);
