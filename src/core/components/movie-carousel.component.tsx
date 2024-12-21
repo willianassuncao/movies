@@ -6,6 +6,7 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { fetchListMovies } from "@core/services/app/movies.service";
 import { IMovie } from "@core/interface";
+import Link from "next/link";
 
 const MovieCarousel: React.FC = () => {
   const sliderRef = useRef<Slider>(null);
@@ -62,7 +63,7 @@ const MovieCarousel: React.FC = () => {
       setHasMore(data.Search.length > 0);
     } catch (error) {
       setError("Erro ao carregar dados");
-      console.error("Failed to fetch movies:", error);
+      console.error("Erro ao carregar dados:", error);
     } finally {
       setLoading(false);
     }
@@ -89,23 +90,24 @@ const MovieCarousel: React.FC = () => {
         <Slider ref={sliderRef} {...settings}>
           {movies.map((movie) => (
             <div key={movie.imdbID} className="px-2 mb-4">
-              <div className="bg-white text-black flex flex-col shadow-md rounded overflow-hidden">
-                {movie.Poster !== "N/A" ? (
-                  <img
-                    src={movie.Poster}
-                    alt={movie.Title}
-                    className="w-full h-[400px] object-cover"
-                  />
-                ) : (
-                  <div className="h-[400px] flex items-center justify-center w-full bg-gray-200">
-                    No Image
-                  </div>
-                )}
-                <div className="p-2 text-sm min-h-[150px] max-h-[120px] overflow-auto">
-                  <p>
-                    <strong>Title:</strong> {movie.details?.Title || "Loading..."}
-                  </p>
-                  <p>
+              <Link href={`/movies/${movie.imdbID}`}>
+                <div className="bg-white text-black flex flex-col shadow-md rounded overflow-hidden cursor-pointer hover:scale-105 transition-transform">
+                  {movie.Poster !== "N/A" ? (
+                    <img
+                      src={movie.Poster}
+                      alt={movie.Title}
+                      className="w-full h-[400px] object-cover"
+                    />
+                  ) : (
+                    <div className="h-[400px] flex items-center justify-center w-full bg-gray-200">
+                      No Image
+                    </div>
+                  )}
+                  <div className="p-2 text-sm min-h-[150px] max-h-[120px] overflow-auto">
+                    <p>
+                      <strong>Title:</strong> {movie.Title}
+                    </p>
+                    <p>
                     <strong>Year:</strong> {movie.details?.Year || "Loading..."}
                   </p>
                   <p>
@@ -116,9 +118,10 @@ const MovieCarousel: React.FC = () => {
                   </p>
                   <p>
                     <strong>Country:</strong> {movie.details?.Country || "Loading..."}
-                  </p>
+                    </p>
+                  </div>
                 </div>
-              </div>
+              </Link>
             </div>
           ))}
         </Slider>

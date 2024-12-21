@@ -5,9 +5,9 @@ import { ILink } from "@core/interface";
 const NavBar: FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const menuList: ILink[] = [
-    { href: "#", label: "Início" },
-    { href: "#", label: "Categoria" },
-    { href: "#", label: "Minha lista" },
+    { href: "/", label: "Início" },
+    { href: "/category", label: "Categoria" },
+    { href: "/my-list", label: "Minha lista" },
   ];
 
   const toggleMenu = () => {

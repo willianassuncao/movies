@@ -3,18 +3,18 @@ import { APPCONFIG } from "@/core/configs/app.config";
 import { IDetailsMovie, IListMovies } from "@/core/interface";
 
 const api = axios.create({
-  baseURL: APPCONFIG.API_KEY,
+  baseURL: APPCONFIG.BASE_URL,
   headers: {
     "Content-Type": "application/json",
   },
 });
 
 export async function searchMarvelMovies(page: number = 1): Promise<IListMovies> {
-  const response = await api.get<IListMovies>('', {
+  const response = await api.get<IListMovies>("", {
     params: {
-      apikey: APPCONFIG.BASE_URL,
-      s: 'marvel',
-      type: 'movie',
+      apikey: APPCONFIG.API_KEY,
+      s: "marvel",
+      type: "movie",
       page,
     },
   });
@@ -22,11 +22,11 @@ export async function searchMarvelMovies(page: number = 1): Promise<IListMovies>
 }
 
 export async function getMovieDetails(imdbID: string): Promise<IDetailsMovie> {
-  const response = await api.get<IDetailsMovie>('', {
+  const response = await api.get<IDetailsMovie>("", {
     params: {
-      apikey: APPCONFIG.BASE_URL,
+      apikey: APPCONFIG.API_KEY,
       i: imdbID,
-      plot: 'short',
+      plot: "short",
     },
   });
   return response.data;
