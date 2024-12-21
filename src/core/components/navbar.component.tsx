@@ -16,7 +16,7 @@ const NavBar: FC = () => {
 
   return (
     <nav className="flex items-center justify-between p-4 bg-gray-800 text-white">
-      <div className="text-xl font-bold">MV Filmes</div>
+      <Link href={`/`} className="text-xl font-bold">MV Filmes</Link>
 
       <div className="hidden md:flex space-x-4">
         {

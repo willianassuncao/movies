@@ -1,21 +1,25 @@
+import Link from "next/link";
 import React from "react";
 
 const MinhaLista: React.FC = () => {
   const movies = [
     {
-      title: "Vingadores: Ultimato",
-      description: "Após o estalar de dedos de Thanos, os Vingadores se unem para reverter o caos.",
-      image: "https://m.media-amazon.com/images/I/81ExhpBEbHL._AC_SL1500_.jpg",
+      title: "Captain Marvel",
+      description: "Carol Danvers becomes one of the universe's most powerful heroes when Earth is caught in the middle of a galactic war between two alien races.",
+      image: "https://m.media-amazon.com/images/M/MV5BZDI1NGU2ODAtNzBiNy00MWY5LWIyMGEtZjUxZjUwZmZiNjBlXkEyXkFqcGc@._V1_SX300.jpg",
+      id: "tt4154664"
     },
     {
-      title: "A Origem",
-      description: "Um ladrão que invade sonhos tenta implantar uma ideia na mente de um executivo.",
-      image: "https://m.media-amazon.com/images/I/91kFYg4fX3L._AC_SL1500_.jpg",
+      title: "Marvel One-Shot: Agent Carter",
+      description: "Frustrated at being marginalized at work, Peggy Carter goes on an unauthorized solo field mission.",
+      image: "https://m.media-amazon.com/images/M/MV5BZDIwZTM4M2QtMWFhYy00N2VmLWFlMjItMzI3NjBjYTc0OTMxXkEyXkFqcGdeQXVyNTE1NjY5Mg@@._V1_SX300.jpg",
+      id: "tt3067038"
     },
     {
-      title: "Matrix",
-      description: "Um programador descobre a verdade sobre sua realidade e seu papel em uma guerra contra as máquinas.",
-      image: "https://m.media-amazon.com/images/I/51EG732BV3L._AC_.jpg",
+      title: "Marvel One-Shot: All Hail the King",
+      description: "A documentary filmmaker interviews the now-famous Trevor Slattery from behind bars.",
+      image: "https://m.media-amazon.com/images/M/MV5BZGFkMTZkMDQtNzM4Yy00YWEwLTkzOWEtZTMyNDRlNmJhYWJhXkEyXkFqcGdeQXVyNTE1NjY5Mg@@._V1_SX300.jpg",
+      id: "tt3438640"
     },
   ];
 
@@ -31,22 +35,23 @@ const MinhaLista: React.FC = () => {
 
         <div className="space-y-6">
           {movies.map((movie, index) => (
-            <div
-              key={index}
-              className="flex items-center justify-between p-4 bg-gray-800 rounded-lg shadow-md hover:bg-gray-700 transition duration-300"
-            >
-              <div className="flex items-center">
-                <img
-                  src={movie.image}
-                  alt={movie.title}
-                  className="w-24 h-36 object-cover rounded-md"
-                />
-                <div className="ml-4">
-                  <h3 className="text-xl font-bold">{movie.title}</h3>
-                  <p className="text-gray-400 text-sm mt-2">{movie.description}</p>
+              <Link
+                href={`/movies/${movie.id}`}
+                key={index}
+                className="flex items-center justify-between p-4 bg-gray-800 rounded-lg shadow-md hover:bg-gray-700 transition duration-300"
+              >
+                <div className="flex items-center">
+                  <img
+                    src={movie.image}
+                    alt={movie.title}
+                    className="w-24 h-36 object-cover rounded-md"
+                  />
+                  <div className="ml-4">
+                    <h3 className="text-xl font-bold">{movie.title}</h3>
+                    <p className="text-gray-400 text-sm mt-2">{movie.description}</p>
+                  </div>
                 </div>
-              </div>
-            </div>
+              </Link>
           ))}
         </div>
       </div>
