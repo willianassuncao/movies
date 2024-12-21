@@ -1,9 +1,9 @@
 "use client";
 
-import './globals.css';
-import { ReactNode, useState } from 'react';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import NavBar from '@/components/NavBar';
+import "./globals.css";
+import { ReactNode, useState } from "react";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import NavBar from "@core/components/navbar.component";
 
 export default function RootLayout({
   children,

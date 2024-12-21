@@ -1,9 +1,9 @@
-import React from 'react';
+import React from "react";
 
-const desktopBanner = '/images/banner-desktop.jpg';
-const mobileBanner = '/images/banner-mobile.jpg';
+const desktopBanner = "/images/banner-desktop.jpg";
+const mobileBanner = "/images/banner-mobile.jpg";
 
-export const Banners: React.FC = () => {
+export const Banner: React.FC = () => {
   return (
     <div className="relative w-full max-w-full h-[400px] md:h-[600px]">
       <picture>

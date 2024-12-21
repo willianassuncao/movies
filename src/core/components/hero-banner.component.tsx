@@ -1,10 +1,10 @@
-import { FC } from 'react'
-import { Banners } from './Banners'
+import { FC } from "react"
+import { Banner } from "@core/components/banner.component";
 
 const HeroBanner: FC = () => {
   return (
     <div className="relative w-full flex items-center justify-center bg-gray-700 overflow-hidden">
-      <Banners />
+      <Banner />
     </div>
   );
 };

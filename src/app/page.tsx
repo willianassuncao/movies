@@ -1,5 +1,5 @@
-import HeroBanner from '@/components/HeroBanner'
-import MovieCarousel from '@/components/MovieCarousel'
+import HeroBanner from "@core/components/hero-banner.component"
+import MovieCarousel from "@core/components/movie-carousel.component"
 
 export default function Page() {
   return (

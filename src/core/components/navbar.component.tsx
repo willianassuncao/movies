@@ -1,8 +1,14 @@
-import { FC, useState } from 'react';
-import Link from 'next/link';
+import { FC, useState } from "react";
+import Link from "next/link";
+import { ILink } from "@core/interface";
 
 const NavBar: FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const menuList: ILink[] = [
+    { href: "#", label: "Início" },
+    { href: "#", label: "Categoria" },
+    { href: "#", label: "Minha lista" },
+  ];
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -10,21 +16,16 @@ const NavBar: FC = () => {
 
   return (
     <nav className="flex items-center justify-between p-4 bg-gray-800 text-white">
-      <div className="text-xl font-bold">Menu</div>
+      <div className="text-xl font-bold">MV Filmes</div>
 
       <div className="hidden md:flex space-x-4">
-        <Link href="#" className="hover:underline">
-          Home
-        </Link>
-        <Link href="#" className="hover:underline">
-          About
-        </Link>
-        <Link href="#" className="hover:underline">
-          Services
-        </Link>
-        <Link href="#" className="hover:underline">
-          Contact
-        </Link>
+        {
+          menuList.map((item) => (
+            <Link key={item.label} href={item.href} className="hover:underline">
+              {item.label}
+            </Link>
+          ))
+        }
       </div>
 
       <button
@@ -47,18 +48,13 @@ const NavBar: FC = () => {
           >
             &times;
           </button>
-          <Link href="#" className="text-2xl hover:underline" onClick={toggleMenu}>
-            Home
-          </Link>
-          <Link href="#" className="text-2xl hover:underline" onClick={toggleMenu}>
-            About
-          </Link>
-          <Link href="#" className="text-2xl hover:underline" onClick={toggleMenu}>
-            Services
-          </Link>
-          <Link href="#" className="text-2xl hover:underline" onClick={toggleMenu}>
-            Contact
-          </Link>
+          {
+          menuList.map((item) => (
+            <Link key={item.label} href={item.href} className="text-2xl hover:underline" onClick={toggleMenu}>
+              {item.label}
+            </Link>
+          ))
+        }
         </div>
       )}
     </nav>

@@ -4,19 +4,21 @@ import React, { useState, useEffect, useRef } from "react";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import {
-  searchMarvelMovies,
-  OMDbSearchItem,
-  getMovieDetails,
-  OMDbMovieDetails,
-} from "../services/omdb";
+import { fetchListMovies } from "@core/services/app/movies.service";
+import { IMovie } from "@core/interface";
 
 const MovieCarousel: React.FC = () => {
   const sliderRef = useRef<Slider>(null);
+  const [movies, setMovies] = useState<IMovie[]>([]);
+  const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
+  const [initialized, setInitialized] = useState(false);
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(true);
 
   const settings = {
     dots: false,
-    infinite: false,
+    infinite: true,
     speed: 500,
     slidesToShow: 5,
     slidesToScroll: 1,
@@ -53,36 +55,16 @@ const MovieCarousel: React.FC = () => {
     },
   };
 
-  const [movies, setMovies] = useState<OMDbSearchItem[]>([]);
-  const [details, setDetails] = useState<Record<string, OMDbMovieDetails>>({});
-  const [page, setPage] = useState(1);
-  const [hasMore, setHasMore] = useState(true);
-  const [initialized, setInitialized] = useState(false);
-
   const fetchMovies = async () => {
     try {
-      const data = await searchMarvelMovies(page);
-      const searchResults = data.Search ?? [];
-
-      setMovies((prev) => [...prev, ...searchResults]);
-      setHasMore(searchResults.length > 0);
-
-      const newDetails = await Promise.all(
-        searchResults.map((movie) =>
-          details[movie.imdbID]
-            ? Promise.resolve(details[movie.imdbID])
-            : getMovieDetails(movie.imdbID)
-        )
-      );
-
-      const detailsMap = newDetails.reduce((acc, detail) => {
-        acc[detail.imdbID] = detail;
-        return acc;
-      }, {} as Record<string, OMDbMovieDetails>);
-
-      setDetails((prev) => ({ ...prev, ...detailsMap }));
+      const data = await fetchListMovies();
+      setMovies((prev) => [...prev, ...data.Search]);
+      setHasMore(data.Search.length > 0);
     } catch (error) {
+      setError("Erro ao carregar dados");
       console.error("Failed to fetch movies:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -96,6 +78,9 @@ const MovieCarousel: React.FC = () => {
       setInitialized(true);
     }
   }, [initialized]);
+
+  if (loading) return <p className="w-full text-center">Carregando...</p>;
+  if (error) return <p>{error}</p>;
 
   return (
     <div className="w-4/5 mx-auto">
@@ -118,19 +103,19 @@ const MovieCarousel: React.FC = () => {
                 )}
                 <div className="p-2 text-sm min-h-[150px] max-h-[120px] overflow-auto">
                   <p>
-                    <strong>Title:</strong> {details[movie.imdbID]?.Title || "Loading..."}
+                    <strong>Title:</strong> {movie.details?.Title || "Loading..."}
                   </p>
                   <p>
-                    <strong>Year:</strong> {details[movie.imdbID]?.Year || "Loading..."}
+                    <strong>Year:</strong> {movie.details?.Year || "Loading..."}
                   </p>
                   <p>
-                    <strong>Writer:</strong> {details[movie.imdbID]?.Writer || "Loading..."}
+                    <strong>Writer:</strong> {movie.details?.Writer || "Loading..."}
                   </p>
                   <p>
-                    <strong>Language:</strong> {details[movie.imdbID]?.Language || "Loading..."}
+                    <strong>Language:</strong> {movie.details?.Language || "Loading..."}
                   </p>
                   <p>
-                    <strong>Country:</strong> {details[movie.imdbID]?.Country || "Loading..."}
+                    <strong>Country:</strong> {movie.details?.Country || "Loading..."}
                   </p>
                 </div>
               </div>
